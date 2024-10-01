@@ -1,17 +1,22 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 
+import { Chessground } from 'chessground';
+
+import "chessground/assets/chessground.base.css";
+import 'chessground/assets/chessground.brown.css';
+import 'chessground/assets/chessground.cburnett.css';
 // Remember to rename these classes and interfaces!
 
-interface MyPluginSettings {
+interface ChessSettings {
 	mySetting: string;
 }
 
-const DEFAULT_SETTINGS: MyPluginSettings = {
+const DEFAULT_SETTINGS: ChessSettings = {
 	mySetting: 'default'
 }
 
-export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
+export default class Chess extends Plugin {
+	settings: ChessSettings;
 
 	async onload() {
 		await this.loadSettings();
@@ -76,6 +81,12 @@ export default class MyPlugin extends Plugin {
 
 		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
 		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
+
+
+		this.registerMarkdownCodeBlockProcessor('chess', (source, el, ctx) => {
+			const config = {};
+			const ground = Chessground(el, config);
+		});
 	}
 
 	onunload() {
@@ -97,26 +108,26 @@ class SampleModal extends Modal {
 	}
 
 	onOpen() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.setText('Woah!');
 	}
 
 	onClose() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.empty();
 	}
 }
 
 class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+	plugin: Chess;
 
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: Chess) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
 
 	display(): void {
-		const {containerEl} = this;
+		const { containerEl } = this;
 
 		containerEl.empty();
 
