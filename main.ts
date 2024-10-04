@@ -2,9 +2,9 @@ import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Set
 
 import { Chessground } from 'chessground';
 
-import "chessground/assets/chessground.base.css";
-import 'chessground/assets/chessground.brown.css';
-import 'chessground/assets/chessground.cburnett.css';
+// import "chessground/assets/chessground.base.css";
+// import 'chessground/assets/chessground.brown.css';
+// import 'chessground/assets/chessground.cburnett.css';
 // Remember to rename these classes and interfaces!
 
 interface ChessSettings {
@@ -22,7 +22,7 @@ export default class Chess extends Plugin {
 		await this.loadSettings();
 
 		// This creates an icon in the left ribbon.
-		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
+		const ribbonIconEl = this.addRibbonIcon('dice', 'Chess MD', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
 			new Notice('This is a notice!');
 		});
@@ -84,8 +84,26 @@ export default class Chess extends Plugin {
 
 
 		this.registerMarkdownCodeBlockProcessor('chess', (source, el, ctx) => {
+			// create a div under el and set its width and height to 100%
+			const board = document.createElement('div');
+			board.style.width = '100%';
+			board.style.height = '100%';
+			board.style.position = 'relative';
+			// board.style.display = 'table';
+			el.appendChild(board);
+
+			const wrapper = document.createElement('div');
+			wrapper.style.width = '100%';
+			wrapper.style.height = '100%';
+			wrapper.style.display = 'table';
+			wrapper.style.paddingBottom = '100%';
+			// wrapper.style.position = 'absolute';
+			board.appendChild(wrapper);
+
+
 			const config = {};
-			const ground = Chessground(el, config);
+			const _ground = Chessground(wrapper, config);
+			console.log('Chessground', _ground);
 		});
 	}
 
