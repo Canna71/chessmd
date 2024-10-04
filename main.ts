@@ -1,6 +1,6 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 
-import { Chessground } from 'chessground';
+import { createChessboard } from 'src/chessboard';
 
 // import "chessground/assets/chessground.base.css";
 // import 'chessground/assets/chessground.brown.css';
@@ -84,26 +84,7 @@ export default class Chess extends Plugin {
 
 
 		this.registerMarkdownCodeBlockProcessor('chess', (source, el, ctx) => {
-			// create a div under el and set its width and height to 100%
-			const board = document.createElement('div');
-			board.style.width = '100%';
-			board.style.height = '100%';
-			board.style.position = 'relative';
-			// board.style.display = 'table';
-			el.appendChild(board);
-
-			const wrapper = document.createElement('div');
-			wrapper.style.width = '100%';
-			wrapper.style.height = '100%';
-			wrapper.style.display = 'table';
-			wrapper.style.paddingBottom = '100%';
-			// wrapper.style.position = 'absolute';
-			board.appendChild(wrapper);
-
-
-			const config = {};
-			const _ground = Chessground(wrapper, config);
-			console.log('Chessground', _ground);
+			createChessboard(source, el);
 		});
 	}
 

@@ -14,6 +14,9 @@ importers:
       chessground:
         specifier: ^9.1.1
         version: 9.1.1
+      chessops:
+        specifier: ^0.14.1
+        version: 0.14.1
     devDependencies:
       '@types/node':
         specifier: ^16.18.112
@@ -44,6 +47,9 @@ importers:
         version: 4.7.4
 
 packages:
+
+  '@badrap/result@0.2.13':
+    resolution: {integrity: sha512-Qvyzz0dmGY0h8pwvBFo1BznAKf5Y5NXIDiqhPALWtfU7oHbAToCtPu4FlYQ3uysskSWLx8GUiyhe0nv0nDd/7Q==}
 
   '@codemirror/state@6.4.1':
     resolution: {integrity: sha512-QkEyUiLhsJoZkbumGZlswmAhA7CBU02Wrz7zvH4SrcifbsqwlXShVXg65f3v/ts57W3dqyamEriMhij1Z3Zz4A==}
@@ -357,6 +363,9 @@ packages:
 
   chessground@9.1.1:
     resolution: {integrity: sha512-X4xrBICrixaLATCn+jGEzk58UXcas+9QqJnwVq9nT7AaX2M1CJLMA0vC7noG0s6Tr2zoAHZ1FOviE5b05MgduQ==}
+
+  chessops@0.14.1:
+    resolution: {integrity: sha512-CnMcfypDVrl/+MkErK0YMAEvivAAnUQ/2f32C54F9HbmDVEDjvoXJYLnS//+4HWGLqGA5+yDs+Y2T0gsxxLgpQ==}
 
   chokidar@4.0.1:
     resolution: {integrity: sha512-n8enUVCED/KVRQlab1hr3MVpcVMvxtZjmEa956u+4YijlmQED223XMSYj2tLuKvr4jcCTzNNMpQDUer72MMmzA==}
@@ -816,6 +825,8 @@ packages:
 
 snapshots:
 
+  '@badrap/result@0.2.13': {}
+
   '@codemirror/state@6.4.1': {}
 
   '@codemirror/view@6.34.1':
@@ -1079,6 +1090,10 @@ snapshots:
   chess.js@1.0.0-beta.8: {}
 
   chessground@9.1.1: {}
+
+  chessops@0.14.1:
+    dependencies:
+      '@badrap/result': 0.2.13
 
   chokidar@4.0.1:
     dependencies:
