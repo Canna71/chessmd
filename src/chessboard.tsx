@@ -1,33 +1,56 @@
 import { Chessground } from 'chessground';
 import { Config } from 'chessground/config';
 import { BoardData } from './boarddata';
-import { Chess } from 'chessops/chess';
-import { makeFen, parseFen } from 'chessops/fen';
+// import { Chess } from 'chessops/chess';
+// import { makeFen, parseFen } from 'chessops/fen';
 import { parseYaml } from 'obsidian';
-import { parseSquare, parseUci } from 'chessops';
+// import { parseSquare, parseUci } from 'chessops';
+import { render } from "solid-js/web";
+import { createSignal, onMount } from 'solid-js';
+import { Api } from 'chessground/api';
+
 
 export function createChessboard(data: string, el: HTMLElement) {
 	// create a div under el and set its width and height to 100%
-	const board = document.createElement('div');
-	board.style.width = '100%';
-	board.style.height = '100%';
-	board.style.position = 'relative';
-	// board.style.display = 'table';
-	el.appendChild(board);
 
-	const wrapper = document.createElement('div');
-	wrapper.style.width = '100%';
-	wrapper.style.height = '100%';
-	wrapper.style.display = 'table';
-	wrapper.style.paddingBottom = '100%';
-	// wrapper.style.position = 'absolute';
-	board.appendChild(wrapper);
+	let wrapper! : HTMLDivElement;
+
+	const [api, setApi] = createSignal<Api | undefined>(undefined);
+
+	const onClick = () => {
+		const cg = api();
+		if (!cg) {
+			return;
+		}
+		cg.newPiece({
+			role: 'king',
+			color: 'white'
+		}, 'e2');
+		// log new fen
+		console.log(cg.getFen());
+	}
+
+
+	render(() => <div class="chess-container">
+		<div ref={wrapper} class="chessboard" >
+
+		</div>
+		<div>
+			<button onClick={onClick} >Hit me</button>
+		</div>
+	</div>, el);
+ 
+
+
+
+
 
 	// create a test button
 
 
 	// parse data as yaml using obsidian's frontmatter parser
 	const boardData = parseYaml(data) as BoardData;
+	console.log(boardData);
 	// 'r2q2k1/1p6/p2p4/2pN1rp1/N1Pb2Q1/8/PP1B4/R6K b - - 2 25'
 
 	const config: Config = {
@@ -56,32 +79,28 @@ export function createChessboard(data: string, el: HTMLElement) {
 		},
 
 	};
-	const api = Chessground(wrapper, config);
 
-	api.set({
-		movable: {
-			events: {
-				after: (orig, dest, metadata) => {
-					console.log(orig, dest, metadata);
-					console.log(api.getFen());
+	// solid-js onLoad equivalent
+	onMount(async () => {
+		if (!wrapper) {
+			return;
+		}
+		const api = Chessground(wrapper, config);
+		api.set({
+			movable: {
+				events: {
+					after: (orig, dest, metadata) => {
+						console.log(orig, dest, metadata);
+						console.log(api.getFen());
+					}
 				}
 			}
-		}
+		});
+		setApi(api);
 	});
 
-	const button = document.createElement('button');
-	button.textContent = 'Click me';
-	button.onclick = () => {
-		// https://github.com/victorocna/next-chessground/blob/master/components/EditorPieces.jsx
 
-		api.newPiece({
-			role: 'king',
-			color: 'white'
-		}, 'e2');
-		// log new fen
-		console.log(api.getFen());
-	};
-	el.appendChild(button);
+
 
 
 

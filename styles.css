@@ -272,3 +272,14 @@ cg-board square.current-premove {
 }
 
 /* styles.scss */
+.chess-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.chess-container .chessboard {
+  width: 100%;
+  height: 100%;
+  display: table;
+  padding-bottom: 100%;
+}
