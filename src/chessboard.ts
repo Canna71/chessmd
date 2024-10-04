@@ -24,7 +24,7 @@ export function createChessboard(data: string, el: HTMLElement) {
 	board.appendChild(wrapper);
 
 	// create a test button
-	
+
 
 	// parse data as yaml using obsidian's frontmatter parser
 	const boardData = parseYaml(data) as BoardData;
@@ -39,30 +39,51 @@ export function createChessboard(data: string, el: HTMLElement) {
 		movable: {
 			free: true,  // Allow pieces to be placed freely
 			color: 'both', // Both sides can move pieces
+			// events: {
+			// 	after: (orig, dest, metadata) => {
+			// 		console.log(this,orig, dest, metadata);
+
+			// 	}
+			// }
 		},
 		selectable: {
 			enabled: true, // Allow pieces to be selectable
-			
+
 		},
 		highlight: {
 			lastMove: true,
 			check: true,
 		},
+
 	};
 	const api = Chessground(wrapper, config);
 
+	api.set({
+		movable: {
+			events: {
+				after: (orig, dest, metadata) => {
+					console.log(orig, dest, metadata);
+					console.log(api.getFen());
+				}
+			}
+		}
+	});
 
 	const button = document.createElement('button');
 	button.textContent = 'Click me';
-	button.onclick = () => { 
+	button.onclick = () => {
 		// https://github.com/victorocna/next-chessground/blob/master/components/EditorPieces.jsx
 
 		api.newPiece({
 			role: 'king',
 			color: 'white'
 		}, 'e2');
+		// log new fen
+		console.log(api.getFen());
 	};
 	el.appendChild(button);
+
+
 
 	// api.newPiece(WhitePawn, 'e2');
 	// const setup = parseFen('r1bqkbnr/ppp2Qpp/2np4/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4').unwrap();
