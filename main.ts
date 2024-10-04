@@ -76,7 +76,7 @@ export default class Chess extends Plugin {
 		
 
 		this.registerMarkdownCodeBlockProcessor('chess', (source, el, ctx) => {
-			createChessboard(source, el, ctx, app);
+			createChessboard(source, el, ctx, this.app);
 		});
 	}
 

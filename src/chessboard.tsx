@@ -3,12 +3,13 @@ import { Config } from 'chessground/config';
 import { BoardData } from './boarddata';
 // import { Chess } from 'chessops/chess';
 // import { makeFen, parseFen } from 'chessops/fen';
-import { parseYaml } from 'obsidian';
+import { App, MarkdownPostProcessorContext, parseYaml } from 'obsidian';
 // import { parseSquare, parseUci } from 'chessops';
 import { render } from "solid-js/web";
 import { createSignal, onMount } from 'solid-js';
 import { Api } from 'chessground/api';
 import { saveDataIntoBlock } from './saveDataIntoBlock';
+
 
 
 export function createChessboard(data: string, el: HTMLElement, ctx: MarkdownPostProcessorContext, app: App) {
