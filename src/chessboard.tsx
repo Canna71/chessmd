@@ -8,26 +8,31 @@ import { parseYaml } from 'obsidian';
 import { render } from "solid-js/web";
 import { createSignal, onMount } from 'solid-js';
 import { Api } from 'chessground/api';
+import { saveDataIntoBlock } from './saveDataIntoBlock';
 
 
-export function createChessboard(data: string, el: HTMLElement) {
+export function createChessboard(data: string, el: HTMLElement, ctx: MarkdownPostProcessorContext, app: App) {
 	// create a div under el and set its width and height to 100%
 
 	let wrapper! : HTMLDivElement;
 
 	const [api, setApi] = createSignal<Api | undefined>(undefined);
+	const boardData = parseYaml(data) as BoardData;
+	console.log(boardData);
+	// const [boarddaa, setData] = createSignal<BoardData | undefined>(boardData);
 
 	const onClick = () => {
 		const cg = api();
 		if (!cg) {
 			return;
 		}
-		cg.newPiece({
-			role: 'king',
-			color: 'white'
-		}, 'e2');
+		// cg.newPiece({
+		// 	role: 'king',
+		// 	color: 'white'
+		// }, 'e2');
 		// log new fen
-		console.log(cg.getFen());
+		// console.log(cg.getFen());
+		saveDataIntoBlock(app, { fen: cg.getFen() }, ctx);
 	}
 
 
@@ -36,7 +41,12 @@ export function createChessboard(data: string, el: HTMLElement) {
 
 		</div>
 		<div>
-			<button onClick={onClick} >Hit me</button>
+			<button onClick={onClick} >Save</button>
+		</div>
+		<div class="cg-wrap" style="">
+			<piece class="white king" style="height:50px;width:50px;position:relative;display:block;">
+
+			</piece>
 		</div>
 	</div>, el);
  
@@ -49,13 +59,12 @@ export function createChessboard(data: string, el: HTMLElement) {
 
 
 	// parse data as yaml using obsidian's frontmatter parser
-	const boardData = parseYaml(data) as BoardData;
-	console.log(boardData);
+	
 	// 'r2q2k1/1p6/p2p4/2pN1rp1/N1Pb2Q1/8/PP1B4/R6K b - - 2 25'
 
 	const config: Config = {
 		// fen: boardData?.fen,
-		fen: "8/8/8/8/8/8/8/8 w - - 0 1",
+		fen: boardData?.fen,
 		draggable: {
 			enabled: true
 		},
@@ -92,6 +101,7 @@ export function createChessboard(data: string, el: HTMLElement) {
 					after: (orig, dest, metadata) => {
 						console.log(orig, dest, metadata);
 						console.log(api.getFen());
+						
 					}
 				}
 			}
