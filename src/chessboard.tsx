@@ -9,6 +9,7 @@ import { render } from "solid-js/web";
 import { createSignal, onMount } from 'solid-js';
 import { Api } from 'chessground/api';
 import { saveDataIntoBlock } from './saveDataIntoBlock';
+import { Toolbar } from './Piece';
 
 
 
@@ -16,7 +17,6 @@ export function createChessboard(data: string, el: HTMLElement, ctx: MarkdownPos
 	// create a div under el and set its width and height to 100%
 
 	let wrapper! : HTMLDivElement;
-
 	const [api, setApi] = createSignal<Api | undefined>(undefined);
 	const boardData = parseYaml(data) as BoardData;
 	console.log(boardData);
@@ -44,11 +44,16 @@ export function createChessboard(data: string, el: HTMLElement, ctx: MarkdownPos
 		<div>
 			<button onClick={onClick} >Save</button>
 		</div>
-		<div class="cg-wrap" style="">
-			<piece class="white king" style="height:50px;width:50px;position:relative;display:block;">
-
-			</piece>
-		</div>
+		<Toolbar onPieceSelected={(role) => {
+			const cg = api();
+			if (!cg) {
+				return;
+			}
+			cg.newPiece({
+				role: role,
+				color: 'white'
+			}, 'e2');
+		}} />
 	</div>, el);
  
 
