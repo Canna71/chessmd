@@ -283,3 +283,17 @@ cg-board square.current-premove {
   display: table;
   padding-bottom: 100%;
 }
+.chess-container .pieces-toolbar button {
+  height: auto;
+}
+.chess-container .pieces-toolbar button.selected {
+  background-color: var(--background-modifier-form-field);
+}
+.chess-container .pieces-toolbar piece {
+  cursor: pointer;
+  pointer-events: auto;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  display: inline-block;
+}

@@ -13,4 +13,24 @@
 		display: table;
 		padding-bottom: 100%;
 	}
+
+	.pieces-toolbar {
+
+		button {
+			height: auto;
+
+			&.selected {
+				background-color:  var(--background-modifier-form-field);
+			}
+		}
+
+		piece {
+			cursor: pointer;
+			pointer-events: auto;
+			width: 24px;
+			height: 24px;
+			position: relative;
+			display: inline-block;
+		}
+	}
 }
