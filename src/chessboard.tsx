@@ -17,14 +17,14 @@ import { Piece } from 'chessground/types';
 export function createChessboard(data: string, el: HTMLElement, ctx: MarkdownPostProcessorContext, app: App) {
 	// create a div under el and set its width and height to 100%
 
-	let wrapper! : HTMLDivElement;
+	let wrapper!: HTMLDivElement;
 	const [api, setApi] = createSignal<Api | undefined>(undefined);
 	const [selectedPiece, setSelectedPiece] = createSignal<Piece | null>(null);
 	const boardData = parseYaml(data) as BoardData;
 	console.log(boardData);
 	// const [boarddaa, setData] = createSignal<BoardData | undefined>(boardData);
 
-	const onClick = () => {
+	const onSave = () => {
 		const cg = api();
 		if (!cg) {
 			return;
@@ -38,21 +38,35 @@ export function createChessboard(data: string, el: HTMLElement, ctx: MarkdownPos
 		saveDataIntoBlock(app, { fen: cg.getFen() }, ctx);
 	}
 
+	const onChessboardClick = (e: MouseEvent) => {
+		const cg = api();
+		if (!cg) {
+			return;
+		}
+		const square = cg.getKeyAtDomPos([e.clientX, e.clientY]);
+		if (square && selectedPiece()) {
+			console.log(square);
+			cg.newPiece(selectedPiece()!, square);
+			// addPiece(square, 'K');
+		}
+		console.log(cg.getFen());
+	}
+
 
 	render(() => <div class="chess-container">
-		<div ref={wrapper} class="chessboard" >
+		<div ref={wrapper} class="chessboard" onclick={onChessboardClick} >
 
 		</div>
 		<div>
-			<button onClick={onClick} >Save</button>
+			<button onClick={onSave} >Save</button>
 		</div>
-		<Toolbar 
+		<Toolbar
 			selectedPiece={selectedPiece}
 			setSelectedPiece={setSelectedPiece}
 			color='white'
 		/>
 	</div>, el);
- 
+
 
 
 
@@ -62,7 +76,7 @@ export function createChessboard(data: string, el: HTMLElement, ctx: MarkdownPos
 
 
 	// parse data as yaml using obsidian's frontmatter parser
-	
+
 	// 'r2q2k1/1p6/p2p4/2pN1rp1/N1Pb2Q1/8/PP1B4/R6K b - - 2 25'
 
 	const config: Config = {
@@ -104,7 +118,6 @@ export function createChessboard(data: string, el: HTMLElement, ctx: MarkdownPos
 					after: (orig, dest, metadata) => {
 						console.log(orig, dest, metadata);
 						console.log(api.getFen());
-						
 					}
 				}
 			}
