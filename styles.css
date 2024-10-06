@@ -283,10 +283,10 @@ cg-board square.current-premove {
   display: table;
   padding-bottom: 100%;
 }
-.chess-container .pieces-toolbar button {
+.chess-container button {
   height: auto;
 }
-.chess-container .pieces-toolbar button.selected {
+.chess-container button.selected {
   background-color: var(--background-modifier-form-field);
 }
 .chess-container .pieces-toolbar piece {

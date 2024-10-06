@@ -14,15 +14,17 @@
 		padding-bottom: 100%;
 	}
 
+	button {
+		height: auto;
+
+		&.selected {
+			background-color:  var(--background-modifier-form-field);
+		}
+	}
+
 	.pieces-toolbar {
 
-		button {
-			height: auto;
-
-			&.selected {
-				background-color:  var(--background-modifier-form-field);
-			}
-		}
+		
 
 		piece {
 			cursor: pointer;

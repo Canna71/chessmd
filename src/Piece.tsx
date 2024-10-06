@@ -17,9 +17,9 @@ export const Piece = (props: { role: Role, color: 'white' | 'black' }) => {
 // a piece to add to the board
 // Define the ToolbarProps type
 export type ToolbarProps = {
-    // onPieceSelected: (role: Role) => void;
+	// onPieceSelected: (role: Role) => void;
 	selectedPiece: Accessor<cg.Piece | null>;
-    setSelectedPiece: Setter<cg.Piece | null>;
+	setSelectedPiece: Setter<cg.Piece | null>;
 	color: 'white' | 'black';
 };
 
@@ -31,8 +31,11 @@ export const Toolbar = (props: ToolbarProps) => {
 			role,
 			color: props.color
 		};
-        props.setSelectedPiece(piece);
-    };
+		if (role !== props.selectedPiece()?.role || props.selectedPiece()?.color !== props.color)
+			props.setSelectedPiece(piece);
+		else
+			props.setSelectedPiece(null);
+	};
 
 	return <div class="cg-wrap pieces-toolbar">
 		{ROLES.map(role => <button

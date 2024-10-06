@@ -20,6 +20,7 @@ export function createChessboard(data: string, el: HTMLElement, ctx: MarkdownPos
 	let wrapper!: HTMLDivElement;
 	const [api, setApi] = createSignal<Api | undefined>(undefined);
 	const [selectedPiece, setSelectedPiece] = createSignal<Piece | null>(null);
+	const [deleteMode, setDeleteMode] = createSignal(false);
 	const boardData = parseYaml(data) as BoardData;
 	console.log(boardData);
 	// const [boarddaa, setData] = createSignal<BoardData | undefined>(boardData);
@@ -29,13 +30,13 @@ export function createChessboard(data: string, el: HTMLElement, ctx: MarkdownPos
 		if (!cg) {
 			return;
 		}
-		// cg.newPiece({
-		// 	role: 'king',
-		// 	color: 'white'
-		// }, 'e2');
-		// log new fen
-		// console.log(cg.getFen());
+		
 		saveDataIntoBlock(app, { fen: cg.getFen() }, ctx);
+	}
+
+	const onDeleteModeClicked = () => {
+		setDeleteMode(!deleteMode());
+		setSelectedPiece(null);
 	}
 
 	const onChessboardClick = (e: MouseEvent) => {
@@ -44,10 +45,14 @@ export function createChessboard(data: string, el: HTMLElement, ctx: MarkdownPos
 			return;
 		}
 		const square = cg.getKeyAtDomPos([e.clientX, e.clientY]);
-		if (square && selectedPiece()) {
+		if(!square) return;
+		const piece = selectedPiece();
+		if (piece !== null) {
 			console.log(square);
-			cg.newPiece(selectedPiece()!, square);
+			cg.newPiece(piece, square);
 			// addPiece(square, 'K');
+		} else if (deleteMode()) {
+			cg.state.pieces.delete(square);
 		}
 		console.log(cg.getFen());
 	}
@@ -59,11 +64,19 @@ export function createChessboard(data: string, el: HTMLElement, ctx: MarkdownPos
 		</div>
 		<div>
 			<button onClick={onSave} >Save</button>
+			<button onClick={onDeleteModeClicked} classList={{
+				selected: deleteMode()
+			}} >X</button>
 		</div>
 		<Toolbar
 			selectedPiece={selectedPiece}
 			setSelectedPiece={setSelectedPiece}
 			color='white'
+		/>
+		<Toolbar
+			selectedPiece={selectedPiece}
+			setSelectedPiece={setSelectedPiece}
+			color='black'
 		/>
 	</div>, el);
 
